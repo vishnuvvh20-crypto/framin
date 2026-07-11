@@ -67,7 +67,7 @@ export const CalculatorToolScreen = () => {
             <View style={styles.inputGroup}>
               <Text style={[typography.caption, { color: colors.textLight }]}>{t('calc_salary')} (₹)</Text>
               <TextInput 
-                style={[styles.input, { borderColor: colors.border, color: colors.text, backgroundColor: colors.card }]} 
+                style={[styles.input, { borderColor: colors.border, color: colors.text, backgroundColor: colors.inputBackground }]} 
                 keyboardType="numeric" 
                 value={val1} 
                 onChangeText={setVal1} 
@@ -81,9 +81,9 @@ export const CalculatorToolScreen = () => {
                 <TouchableOpacity 
                   key={op} 
                   onPress={() => setOperator(op)} 
-                  style={[styles.opBtn, { borderColor: colors.primary, backgroundColor: operator === op ? colors.primary : colors.card }]}
+                  style={[styles.opBtn, { borderColor: colors.border, backgroundColor: operator === op ? colors.primary : colors.inputBackground }]}
                 >
-                  <Text style={[styles.opBtnText, { color: operator === op ? '#fff' : colors.primary }]}>
+                  <Text style={[styles.opBtnText, { color: operator === op ? colors.onPrimary : colors.text }]}>
                     {op === '*' ? '×' : op === '/' ? '÷' : op}
                   </Text>
                 </TouchableOpacity>
@@ -93,7 +93,7 @@ export const CalculatorToolScreen = () => {
             <View style={styles.inputGroup}>
               <Text style={[typography.caption, { color: colors.textLight }]}>{t('calc_workers')}</Text>
               <TextInput 
-                style={[styles.input, { borderColor: colors.border, color: colors.text, backgroundColor: colors.card }]} 
+                style={[styles.input, { borderColor: colors.border, color: colors.text, backgroundColor: colors.inputBackground }]} 
                 keyboardType="numeric" 
                 value={val2} 
                 onChangeText={setVal2} 
@@ -102,21 +102,21 @@ export const CalculatorToolScreen = () => {
               />
             </View>
 
-            <View style={[styles.resultCard, { backgroundColor: colors.primary + '15' }]}>
+            <View style={[styles.resultCard, { backgroundColor: colors.primaryContainer }]}>
               <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Text style={[typography.caption, { color: colors.primary }]}>{t('calc_total')}</Text>
-                  <Text style={[styles.resultText, { color: colors.primary }]}>₹ {calculateResult().toFixed(2)}</Text>
+                  <Text style={[typography.caption, { color: colors.onPrimaryContainer, fontWeight: 'bold' }]}>{t('calc_total')}</Text>
+                  <Text style={[styles.resultText, { color: colors.onPrimaryContainer }]}>₹ {calculateResult().toFixed(2)}</Text>
               </View>
               <TouchableOpacity style={[styles.addBtnIcon, { backgroundColor: colors.primary }]} onPress={handleSaveResult}>
-                 <Ionicons name="cloud-upload" size={26} color="#fff" />
-                 <Text style={{ color: '#fff', fontSize: 11, fontWeight: 'bold' }}>{t('add')}</Text>
+                 <Ionicons name="cloud-upload" size={26} color={colors.onPrimary} />
+                 <Text style={{ color: colors.onPrimary, fontSize: 11, fontWeight: 'bold', marginTop: 4 }}>{t('add')}</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.inputGroup}>
               <Text style={[typography.caption, { color: colors.textLight }]}>{t('notes')}</Text>
               <TextInput 
-                style={[styles.input, styles.notesInput, { borderColor: colors.border, color: colors.text, backgroundColor: colors.card }]} 
+                style={[styles.input, styles.notesInput, { borderColor: colors.border, color: colors.text, backgroundColor: colors.inputBackground }]} 
                 value={calcNotes} 
                 onChangeText={setCalcNotes} 
                 placeholder={t('placeholder_notes')} 
@@ -127,7 +127,7 @@ export const CalculatorToolScreen = () => {
             </View>
             
             <TouchableOpacity style={[styles.saveBtn, { backgroundColor: colors.primary }]} onPress={handleSaveResult}>
-               <Text style={styles.saveBtnText}>{t('save')}</Text>
+               <Text style={[styles.saveBtnText, { color: colors.onPrimary }]}>{t('save')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.cancelBtn, { borderColor: colors.error }]} onPress={() => navigation.goBack()}>
@@ -148,13 +148,13 @@ const styles = StyleSheet.create({
   input: { borderWidth: 1, padding: spacing.md, borderRadius: 16, fontSize: 18, elevation: 1 },
   notesInput: { fontSize: 16, height: 100, textAlignVertical: 'top' },
   operatorRow: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 },
-  opBtn: { flex: 0.22, height: 55, borderRadius: 16, borderWidth: 1, justifyContent: 'center', alignItems: 'center', elevation: 2 },
+  opBtn: { flex: 0.22, height: 55, borderRadius: 16, borderWidth: 1, justifyContent: 'center', alignItems: 'center', elevation: 1 },
   opBtnText: { fontSize: 26, fontWeight: 'bold' },
   resultCard: { padding: spacing.xl, borderRadius: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', elevation: 2 },
   addBtnIcon: { width: 70, height: 70, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginLeft: 15, elevation: 4 },
   resultText: { fontSize: 36, fontWeight: 'bold', marginTop: 8 },
   saveBtn: { padding: spacing.lg, borderRadius: 16, alignItems: 'center', marginTop: 10, elevation: 3 },
-  saveBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
+  saveBtnText: { fontWeight: 'bold', fontSize: 18 },
   cancelBtn: { padding: spacing.lg, borderRadius: 16, alignItems: 'center', borderWidth: 1, marginTop: 5 },
   cancelBtnText: { fontWeight: 'bold', fontSize: 16 }
 });

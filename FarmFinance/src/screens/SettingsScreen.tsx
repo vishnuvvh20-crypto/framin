@@ -85,10 +85,10 @@ export const SettingsScreen = () => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+      <View style={[styles.header, { backgroundColor: colors.primaryContainer, borderBottomColor: colors.border, borderBottomWidth: 1, paddingVertical: spacing.xl }]}>
         <Ionicons name="person-circle" size={80} color={colors.primary} />
-        <Text style={[typography.header, { marginTop: spacing.sm }]}>{getIdentity()}</Text>
-        <Text style={[typography.caption, { fontWeight: 'bold', color: colors.primary, marginTop: spacing.xs }]}>
+        <Text style={[typography.header, { color: colors.onPrimaryContainer, marginTop: spacing.sm }]}>{getIdentity()}</Text>
+        <Text style={[typography.caption, { fontWeight: 'bold', color: colors.primary, marginTop: spacing.xs, backgroundColor: colors.card, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: colors.border }]}>
           {session ? t('settings_premium_identity') : t('settings_guest_identity')}
         </Text>
       </View>

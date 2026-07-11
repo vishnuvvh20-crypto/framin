@@ -37,22 +37,32 @@ export const TransactionFormScreen = () => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.toggleContainer}>
+        <View style={[styles.toggleContainer, { borderColor: colors.border, backgroundColor: colors.card }]}>
           <TouchableOpacity
-            style={[styles.toggleBtn, { borderColor: colors.border, backgroundColor: colors.card }, type === 'income' && { backgroundColor: colors.success, borderColor: colors.success }]}
+            style={[
+              styles.toggleBtn, 
+              type === 'income' 
+                ? { backgroundColor: colors.primary } 
+                : { backgroundColor: 'transparent' }
+            ]}
             onPress={() => setType('income')}
           >
-            <Text style={[typography.title, { color: type === 'income' ? '#fff' : colors.text }]}>{t('income')}</Text>
+            <Text style={[typography.title, { fontSize: 16, color: type === 'income' ? colors.onPrimary : colors.text }]}>{t('income')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.toggleBtn, { borderColor: colors.border, backgroundColor: colors.card }, type === 'expense' && { backgroundColor: colors.error, borderColor: colors.error }]}
+            style={[
+              styles.toggleBtn, 
+              type === 'expense' 
+                ? { backgroundColor: colors.error } 
+                : { backgroundColor: 'transparent' }
+            ]}
             onPress={() => setType('expense')}
           >
-            <Text style={[typography.title, { color: type === 'expense' ? '#fff' : colors.text }]}>{t('expense')}</Text>
+            <Text style={[typography.title, { fontSize: 16, color: type === 'expense' ? '#fff' : colors.text }]}>{t('expense')}</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={[typography.caption, styles.label]}>{t('title')}</Text>
+        <Text style={[typography.caption, styles.label, { color: colors.textLight }]}>{t('title')}</Text>
         <TextInput
           style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
           value={title}
@@ -61,7 +71,7 @@ export const TransactionFormScreen = () => {
           placeholderTextColor={colors.textLight}
         />
 
-        <Text style={[typography.caption, styles.label]}>{t('amount')}</Text>
+        <Text style={[typography.caption, styles.label, { color: colors.textLight }]}>{t('amount')}</Text>
         <TextInput
           style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
           keyboardType="numeric"
@@ -71,9 +81,9 @@ export const TransactionFormScreen = () => {
           placeholderTextColor={colors.textLight}
         />
 
-        <Text style={[typography.caption, styles.label]}>{t('notes')}</Text>
+        <Text style={[typography.caption, styles.label, { color: colors.textLight }]}>{t('notes')}</Text>
         <TextInput
-          style={[styles.input, { height: 100, backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text, textAlignVertical: 'top' }]}
+          style={[styles.input, { height: 120, backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text, textAlignVertical: 'top' }]}
           multiline
           value={notes}
           onChangeText={setNotes}
@@ -82,7 +92,7 @@ export const TransactionFormScreen = () => {
         />
 
         <TouchableOpacity style={[styles.saveBtn, { backgroundColor: colors.primary }]} onPress={saveTransaction}>
-          <Text style={[typography.title, { color: '#fff' }]}>{t('save')}</Text>
+          <Text style={[typography.title, { color: colors.onPrimary }]}>{t('save')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -91,9 +101,9 @@ export const TransactionFormScreen = () => {
 
 const styles = StyleSheet.create({
   container: { padding: spacing.md, paddingBottom: 40 },
-  toggleContainer: { flexDirection: 'row', marginBottom: spacing.lg },
-  toggleBtn: { flex: 1, padding: spacing.md, borderWidth: 1, alignItems: 'center' },
-  label: { fontWeight: 'bold', marginBottom: spacing.xs, textTransform: 'uppercase' },
-  input: { borderRadius: 8, padding: spacing.md, fontSize: 16, marginBottom: spacing.md, borderWidth: 1 },
-  saveBtn: { padding: spacing.lg, borderRadius: 8, alignItems: 'center', marginBottom: 40 },
+  toggleContainer: { flexDirection: 'row', borderRadius: 16, borderWidth: 1, overflow: 'hidden', marginBottom: spacing.lg },
+  toggleBtn: { flex: 1, padding: spacing.md, alignItems: 'center', justifyContent: 'center' },
+  label: { fontWeight: 'bold', marginBottom: spacing.xs, textTransform: 'uppercase', letterSpacing: 0.5 },
+  input: { borderRadius: 16, padding: spacing.md, fontSize: 16, marginBottom: spacing.md, borderWidth: 1, elevation: 1 },
+  saveBtn: { padding: spacing.lg, borderRadius: 16, alignItems: 'center', marginBottom: 40, elevation: 2 },
 });

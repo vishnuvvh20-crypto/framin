@@ -222,9 +222,9 @@ const CalendarBase = ({ tasks }: { tasks: Task[] }) => {
               <Text style={[typography.title, styles.sectionTitle]}>{t('weather_hourly_trend')} ({new Date(weatherData.daily.time[selectedDayIndex]).toLocaleDateString([], { weekday: 'long' })})</Text>
               {renderHourlyScroller()}
 
-              <View style={[styles.summaryCard, { backgroundColor: colors.primary + '10' }]}>
-                 <Ionicons name="umbrella" size={24} color={colors.primary} />
-                 <Text style={[typography.body, { marginLeft: 15, color: colors.text }]}>
+              <View style={[styles.summaryCard, { backgroundColor: colors.primaryContainer }]}>
+                 <Ionicons name="umbrella" size={24} color={colors.onPrimaryContainer} />
+                 <Text style={[typography.body, { marginLeft: 15, color: colors.onPrimaryContainer, fontWeight: '600' }]}>
                     {weatherData.daily.precipitation_probability_max[selectedDayIndex]}% {t('weather_chance_rain')}
                  </Text>
               </View>
@@ -237,10 +237,10 @@ const CalendarBase = ({ tasks }: { tasks: Task[] }) => {
                     onPress={() => setSelectedDayIndex(i)}
                     style={[
                       styles.listRow, { borderBottomColor: colors.border, borderBottomWidth: i === 6 ? 0 : 1 },
-                      selectedDayIndex === i && { backgroundColor: colors.primary + '15' }
+                      selectedDayIndex === i && { backgroundColor: colors.primaryContainer }
                     ]}
                   >
-                    <Text style={[styles.dayText, { color: colors.text, fontWeight: selectedDayIndex === i ? 'bold' : '600' }]}>{new Date(day).toLocaleString('default', { weekday: 'short' })}</Text>
+                    <Text style={[styles.dayText, { color: selectedDayIndex === i ? colors.onPrimaryContainer : colors.text, fontWeight: selectedDayIndex === i ? 'bold' : '600' }]}>{new Date(day).toLocaleString('default', { weekday: 'short' })}</Text>
                     <View style={styles.iconCell}>
                        <Ionicons name={getWeatherIcon(weatherData.daily.weather_code[i]) as any} size={22} color="#FFA000" />
                        {weatherData.daily.precipitation_probability_max[i] > 20 && <Text style={styles.rainChance}>{weatherData.daily.precipitation_probability_max[i]}%</Text>}
@@ -269,7 +269,7 @@ const CalendarBase = ({ tasks }: { tasks: Task[] }) => {
           style={[styles.addFab, { backgroundColor: colors.primary }]} 
           onPress={() => navigation.navigate('TaskForm', { selectedDate })}
         >
-          <Ionicons name="add" size={32} color="#fff" />
+          <Ionicons name="add" size={32} color={colors.onPrimary} />
         </TouchableOpacity>
       </View>
     </View>

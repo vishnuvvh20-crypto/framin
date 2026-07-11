@@ -114,7 +114,7 @@ export const TaskFormScreen = () => {
     return (
         <KeyboardAvoidingView 
             behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-            style={{ flex: 1, backgroundColor: '#f8fafc' }}
+            style={{ flex: 1, backgroundColor: colors.background }}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 100}
         >
             <ScrollView 
@@ -122,37 +122,38 @@ export const TaskFormScreen = () => {
                 contentContainerStyle={{ paddingBottom: 100 }}
                 keyboardShouldPersistTaps="handled"
             >
-                <View style={[styles.mainCard, styles.shadow]}>
-                    <Text style={styles.label}>{t('task_title_label').toUpperCase()}</Text>
+                <View style={[styles.mainCard, styles.shadow, { backgroundColor: colors.card }]}>
+                    <Text style={[styles.label, { color: colors.textLight }]}>{t('task_title_label').toUpperCase()}</Text>
                     <TextInput 
-                        style={[styles.input, { borderColor: colors.border }]} 
+                        style={[styles.input, { borderColor: colors.border, color: colors.text }]} 
                         placeholder={t('task_title_placeholder')} 
+                        placeholderTextColor={colors.textLight}
                         value={title}
                         onChangeText={setTitle}
                     />
 
-                    <Text style={[styles.label, { marginTop: 30 }]}>{t('field_action_time').toUpperCase()}</Text>
+                    <Text style={[styles.label, { color: colors.textLight, marginTop: 30 }]}>{t('field_action_time').toUpperCase()}</Text>
                     
                     <View style={styles.selectorsRow}>
                         <TouchableOpacity 
-                            style={[styles.selector, { borderColor: colors.border, flex: 1, marginRight: 10 }]} 
+                            style={[styles.selector, { borderColor: colors.border, backgroundColor: colors.inputBackground, flex: 1, marginRight: 10 }]} 
                             onPress={() => setShowDatePicker(true)}
                         >
                             <Ionicons name="calendar-outline" size={20} color={colors.primary} />
                             <View style={{ marginLeft: 10 }}>
-                                <Text style={styles.selectorSub}>{t('date')}</Text>
-                                <Text style={styles.selectorVal}>{date.toLocaleDateString()}</Text>
+                                <Text style={[styles.selectorSub, { color: colors.textLight }]}>{t('date')}</Text>
+                                <Text style={[styles.selectorVal, { color: colors.text }]}>{date.toLocaleDateString()}</Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            style={[styles.selector, { borderColor: colors.border, flex: 1 }]} 
+                            style={[styles.selector, { borderColor: colors.border, backgroundColor: colors.inputBackground, flex: 1 }]} 
                             onPress={() => setShowTimePicker(true)}
                         >
                             <Ionicons name="time-outline" size={20} color={colors.primary} />
                             <View style={{ marginLeft: 10 }}>
-                                <Text style={styles.selectorSub}>{t('time_ampm').toUpperCase()}</Text>
-                                <Text style={styles.selectorVal}>{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                                <Text style={[styles.selectorSub, { color: colors.textLight }]}>{t('time_ampm').toUpperCase()}</Text>
+                                <Text style={[styles.selectorVal, { color: colors.text }]}>{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -171,10 +172,10 @@ export const TaskFormScreen = () => {
                         />
                     )}
 
-                    <View style={styles.remindRow}>
+                    <View style={[styles.remindRow, { backgroundColor: colors.primaryContainer }]}>
                       <View style={{ flex: 1 }}>
-                        <Text style={styles.remindTitle}>{t('reminder_alert')}</Text>
-                        <Text style={styles.remindSub}>{t('reminder_sub')}</Text>
+                        <Text style={[styles.remindTitle, { color: colors.onPrimaryContainer }]}>{t('reminder_alert')}</Text>
+                        <Text style={[styles.remindSub, { color: colors.onPrimaryContainer }]}>{t('reminder_sub')}</Text>
                       </View>
                       <Switch 
                         value={remindEnabled} 
@@ -183,10 +184,11 @@ export const TaskFormScreen = () => {
                       />
                     </View>
 
-                    <Text style={[styles.label, { marginTop: 30 }]}>{t('expert_notes_label').toUpperCase()}</Text>
+                    <Text style={[styles.label, { color: colors.textLight, marginTop: 30 }]}>{t('expert_notes_label').toUpperCase()}</Text>
                     <TextInput 
-                        style={[styles.input, styles.textArea, { borderColor: colors.border }]} 
+                        style={[styles.input, styles.textArea, { borderColor: colors.border, color: colors.text }]} 
                         placeholder={t('expert_notes_placeholder')} 
+                        placeholderTextColor={colors.textLight}
                         multiline
                         numberOfLines={6}
                         value={notes}
@@ -198,8 +200,8 @@ export const TaskFormScreen = () => {
                     style={[styles.addBtn, { backgroundColor: colors.primary }]} 
                     onPress={handleSave}
                 >
-                    <Ionicons name="add-circle" size={28} color="#fff" style={{ marginRight: 12 }} />
-                    <Text style={styles.addBtnText}>+ {t('add_task')}</Text>
+                    <Ionicons name="add-circle" size={28} color={colors.onPrimary} style={{ marginRight: 12 }} />
+                    <Text style={[styles.addBtnText, { color: colors.onPrimary }]}>+ {t('add_task')}</Text>
                 </TouchableOpacity>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -208,18 +210,18 @@ export const TaskFormScreen = () => {
 
 const styles = StyleSheet.create({
     container: { flex: 1, padding: spacing.md },
-    mainCard: { backgroundColor: '#fff', borderRadius: 24, padding: 25, marginBottom: 30 },
+    mainCard: { borderRadius: 24, padding: 25, marginBottom: 30 },
     shadow: { elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 10 },
-    label: { fontSize: 13, fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase', letterSpacing: 1 },
+    label: { fontSize: 13, fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 1 },
     input: { marginTop: 10, paddingVertical: 15, paddingHorizontal: 0, fontSize: 18, fontWeight: '500', borderBottomWidth: 1 },
     textArea: { height: 120, textAlignVertical: 'top', borderBottomWidth: 0, fontSize: 16 },
     selectorsRow: { flexDirection: 'row', marginTop: 15 },
     selector: { flexDirection: 'row', alignItems: 'center', padding: 12, borderRadius: 16, borderStyle: 'dashed', borderWidth: 1.5 },
-    selectorVal: { fontSize: 16, fontWeight: 'bold', color: '#1e293b' },
-    selectorSub: { fontSize: 9, color: '#64748b', fontWeight: 'bold' },
-    remindRow: { flexDirection: 'row', alignItems: 'center', marginTop: 30, backgroundColor: '#f0f9ff', padding: 20, borderRadius: 20 },
-    remindTitle: { fontSize: 16, fontWeight: 'bold', color: '#0369a1' },
-    remindSub: { fontSize: 12, color: '#075985', marginTop: 2 },
+    selectorVal: { fontSize: 16, fontWeight: 'bold' },
+    selectorSub: { fontSize: 9, fontWeight: 'bold' },
+    remindRow: { flexDirection: 'row', alignItems: 'center', marginTop: 30, padding: 20, borderRadius: 20 },
+    remindTitle: { fontSize: 16, fontWeight: 'bold' },
+    remindSub: { fontSize: 12, marginTop: 2 },
     addBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, borderRadius: 20, elevation: 8, marginHorizontal: spacing.md, marginBottom: 60 },
-    addBtnText: { color: '#fff', fontSize: 18, fontWeight: 'bold' }
+    addBtnText: { fontSize: 18, fontWeight: 'bold' }
 });
