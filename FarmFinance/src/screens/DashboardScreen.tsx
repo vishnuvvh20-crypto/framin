@@ -9,6 +9,9 @@ import { database } from '../db/database';
 import { Transaction } from '../db/models/Transaction';
 import { Q } from '@nozbe/watermelondb';
 import { syncWithSupabase } from '../sync';
+import { Card } from '../components/common/Card';
+import { EmptyState } from '../components/common/EmptyState';
+import { spacing } from '../theme';
 
 const formatDate = (date: Date) => {
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -79,65 +82,80 @@ const DashboardContent = ({ transactions, navigation, colors, isDark, t }: { tra
         <View style={styles.headerRow}>
           <View style={styles.titleRow}>
             <Text style={[styles.pageTitle, { color: colors.text }]}>{t('dashboard')}</Text>
-            <View style={[styles.secureBadge, { backgroundColor: isDark ? colors.border : '#e0efe5' }]}>
-              <Text style={[styles.secureText, { color: colors.primary }]}>SECURE</Text>
+            <View style={[styles.secureBadge, { backgroundColor: colors.primaryContainer }]}>
+              <Text style={[styles.secureText, { color: colors.onPrimaryContainer }]}>SECURE</Text>
             </View>
           </View>
         </View>
 
-        {/* ASSET OVERVIEW */}
-        <View style={[styles.assetCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        {/* ASSET OVERVIEW CARD */}
+        <Card style={styles.assetCard} elevation={2}>
           <View style={[styles.assetHeader, { borderBottomColor: colors.border }]}>
             <Text style={[styles.sectionSubtitle, { color: colors.textLight }]}>ASSET OVERVIEW</Text>
             <View style={styles.liveBadge}>
-              <Ionicons name="checkmark-circle-outline" size={12} color="#0a7a3a" />
-              <Text style={styles.liveText}>LIVE</Text>
+              <Ionicons name="checkmark-circle" size={14} color={colors.primary} />
+              <Text style={[styles.liveText, { color: colors.primary }]}>LIVE</Text>
             </View>
           </View>
 
           <View style={styles.assetBody}>
             <View>
               <Text style={[styles.netLiquidityLabel, { color: colors.textLight }]}>Net Liquidity</Text>
-              <Text style={[styles.netLiquidityValue, { color: colors.text }]}>₹{availableBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+              <Text style={[styles.netLiquidityValue, { color: colors.text }]}>
+                ₹{availableBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </Text>
             </View>
-            <View style={[styles.chartContainer, { backgroundColor: isDark ? colors.background : '#e8ecea' }]}>
-              <View style={[styles.chartBar, { height: 8, backgroundColor: '#8db799' }]} />
-              <View style={[styles.chartBar, { height: 12, backgroundColor: '#8db799' }]} />
-              <View style={[styles.chartBar, { height: 10, backgroundColor: '#4c9b68' }]} />
-              <View style={[styles.chartBar, { height: 18, backgroundColor: '#13702a' }]} />
-              <View style={[styles.chartBar, { height: 6, backgroundColor: '#8db799' }]} />
+            <View style={[styles.chartContainer, { backgroundColor: colors.inputBackground }]}>
+              <View style={[styles.chartBar, { height: 8, backgroundColor: colors.primary + '80' }]} />
+              <View style={[styles.chartBar, { height: 12, backgroundColor: colors.primary + 'B0' }]} />
+              <View style={[styles.chartBar, { height: 10, backgroundColor: colors.primary + 'D0' }]} />
+              <View style={[styles.chartBar, { height: 18, backgroundColor: colors.primary }]} />
+              <View style={[styles.chartBar, { height: 6, backgroundColor: colors.primary + '80' }]} />
             </View>
           </View>
 
           <View style={styles.assetFooter}>
             <View>
               <Text style={[styles.totalLabel, { color: colors.textLight }]}>{t('income').toUpperCase()}</Text>
-              <Text style={[styles.totalValue, { color: '#13702a' }]}>₹{totalIncome.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+              <Text style={[styles.totalValue, { color: colors.primary }]}>
+                ₹{totalIncome.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
               <Text style={[styles.totalLabel, { color: colors.textLight }]}>{t('expense').toUpperCase()}</Text>
-              <Text style={[styles.totalValue, { color: '#ba1a1a' }]}>₹{totalExpense.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+              <Text style={[styles.totalValue, { color: colors.error }]}>
+                ₹{totalExpense.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </Text>
             </View>
           </View>
-        </View>
+        </Card>
 
         {/* BUTTONS */}
         <View style={styles.actionRow}>
-          <TouchableOpacity style={[styles.syncBtn, { backgroundColor: isDark ? colors.card : '#eef6f0', borderColor: isDark ? colors.border : '#bad6c3' }]} onPress={handleSync} disabled={isSyncing}>
+          <TouchableOpacity 
+            style={[styles.syncBtn, { backgroundColor: colors.primaryContainer }]} 
+            onPress={handleSync} 
+            disabled={isSyncing}
+          >
             {isSyncing ? (
-               <ActivityIndicator size="small" color={colors.primary} />
+               <ActivityIndicator size="small" color={colors.onPrimaryContainer} />
             ) : (
-               <Ionicons name="cloud-upload-outline" size={18} color={colors.primary} />
+               <Ionicons name="cloud-upload" size={18} color={colors.onPrimaryContainer} />
             )}
-            <Text style={[styles.syncBtnText, { color: colors.primary }]}>{isSyncing ? 'Syncing...' : 'Push Sync'}</Text>
+            <Text style={[styles.syncBtnText, { color: colors.onPrimaryContainer }]}>
+              {isSyncing ? 'Syncing...' : 'Push Sync'}
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.printBtn, { backgroundColor: colors.card, borderColor: colors.border }]} onPress={() => {
-            if (Platform.OS === 'web') {
-              window.print();
-            } else {
-              Alert.alert('Print', 'Please visit the Reports tab to generate reports.');
-            }
-          }}>
+          <TouchableOpacity 
+            style={[styles.printBtn, { backgroundColor: colors.card, borderColor: colors.border }]} 
+            onPress={() => {
+              if (Platform.OS === 'web') {
+                window.print();
+              } else {
+                Alert.alert('Print', 'Please visit the Reports tab to generate reports.');
+              }
+            }}
+          >
             <Ionicons name="print-outline" size={18} color={colors.text} />
           </TouchableOpacity>
         </View>
@@ -152,57 +170,70 @@ const DashboardContent = ({ transactions, navigation, colors, isDark, t }: { tra
 
         {/* ACTIVITY LIST */}
         {recentTransactions.length === 0 ? (
-          <View style={{ alignItems: 'center', marginVertical: 20 }}>
-             <Text style={{ color: colors.textLight }}>No transactions found.</Text>
-          </View>
+          <EmptyState 
+            title="No transactions yet" 
+            description="Start recording your farm income and expenses to track your balance."
+            icon="cash-outline"
+            actionText="Add Transaction"
+            onActionPress={() => navigation.navigate('TransactionForm')}
+          />
         ) : (
           recentTransactions.map(txn => {
             const isExpense = txn.type === 'expense';
             return (
-              <TouchableOpacity 
+              <Card 
                 key={txn.id} 
-                style={[styles.activityItem, { backgroundColor: colors.card, borderColor: colors.border, borderWidth: isDark ? 1 : 0 }]}
-                activeOpacity={0.7}
+                style={styles.activityCard}
                 onPress={() => navigation.navigate('TransactionDetail', { transactionId: txn.id })}
+                elevation={1}
               >
                 <View style={styles.activityLeft}>
-                  <View style={[styles.iconCircle, { backgroundColor: isExpense ? '#ffeaea' : '#e6f4ea' }]}>
-                    <Ionicons name={getCategoryIcon(txn.title + ' ' + txn.category)} size={18} color={isExpense ? "#ba1a1a" : "#13702a"} />
+                  <View style={[styles.iconCircle, { backgroundColor: isExpense ? colors.error + '15' : colors.primary + '15' }]}>
+                    <Ionicons 
+                      name={getCategoryIcon(txn.title + ' ' + txn.category)} 
+                      size={18} 
+                      color={isExpense ? colors.error : colors.primary} 
+                    />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={[styles.activityTitle, { color: colors.text }]} numberOfLines={1}>{txn.title}</Text>
-                    <Text style={[styles.activitySub, { color: colors.textLight }]}>{formatDate(new Date(txn.transactionDate))}  •  {isExpense ? 'DEBIT' : 'CREDIT'}</Text>
+                    <Text style={[styles.activitySub, { color: colors.textLight }]}>
+                      {formatDate(new Date(txn.transactionDate))}  •  {isExpense ? 'DEBIT' : 'CREDIT'}
+                    </Text>
                   </View>
                 </View>
                 <View style={{ alignItems: 'flex-end', marginLeft: 10 }}>
-                  <Text style={[styles.activityAmount, { color: isExpense ? '#ba1a1a' : '#13702a' }]}>
+                  <Text style={[styles.activityAmount, { color: isExpense ? colors.error : colors.primary }]}>
                     {isExpense ? '-' : '+'}₹{txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </Text>
-                  <Text style={styles.activityStatus}>SUCCESS</Text>
+                  <Text style={[styles.activityStatus, { color: colors.primary }]}>SUCCESS</Text>
                 </View>
-              </TouchableOpacity>
+              </Card>
             );
           })
         )}
 
         {/* WEEKLY MARGIN */}
-        <View style={[styles.marginCard, { backgroundColor: colors.card, borderColor: colors.border, borderWidth: isDark ? 1 : 0 }]}>
+        <Card style={styles.marginCard} elevation={1}>
           <View style={styles.marginHeader}>
             <Text style={[styles.marginText, { color: colors.text }]}>Weekly Margin</Text>
             <Text style={[styles.marginPercent, { color: colors.primary }]}>+12%</Text>
           </View>
-          <View style={[styles.progressBarBg, { backgroundColor: isDark ? colors.background : '#eaeaeb' }]}>
+          <View style={[styles.progressBarBg, { backgroundColor: colors.inputBackground }]}>
             <View style={[styles.progressBarFill, { backgroundColor: colors.primary }]} />
           </View>
-        </View>
+        </Card>
 
         <View style={{ height: 120 }} />
       </ScrollView>
 
       {/* FABs */}
       <View style={styles.fabContainer}>
-        <TouchableOpacity style={[styles.miniFab, { backgroundColor: colors.card, borderColor: colors.border }]} onPress={() => navigation.navigate('CalculatorTool')}>
-          <Ionicons name="calculator-outline" size={20} color={colors.text} />
+        <TouchableOpacity 
+          style={[styles.miniFab, { backgroundColor: colors.primaryContainer, borderColor: colors.primary }]} 
+          onPress={() => navigation.navigate('CalculatorTool')}
+        >
+          <Ionicons name="calculator" size={20} color={colors.onPrimaryContainer} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -224,54 +255,54 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   topNavbar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 15, paddingTop: 40 },
   navLeft: { flexDirection: 'row', alignItems: 'center', gap: 15 },
-  navTitle: { fontSize: 20, fontWeight: '700', color: '#005a2b' },
-  separator: { height: 1, backgroundColor: '#f0f0f0', width: '100%' },
+  navTitle: { fontSize: 20, fontWeight: '700' },
+  separator: { height: 1, width: '100%' },
   
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 20, paddingBottom: 15 },
   titleRow: { flexDirection: 'row', alignItems: 'center' },
-  pageTitle: { fontSize: 18, fontWeight: '500', color: '#333', marginRight: 10 },
-  secureBadge: { backgroundColor: '#e0efe5', paddingHorizontal: 6, paddingVertical: 3, borderRadius: 4 },
-  secureText: { fontSize: 10, fontWeight: '700', color: '#13702a' },
+  pageTitle: { fontSize: 22, fontWeight: '700', marginRight: 10 },
+  secureBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
+  secureText: { fontSize: 10, fontWeight: '700' },
 
-  assetCard: { backgroundColor: '#f4f6f5', marginHorizontal: 20, borderRadius: 12, padding: 20, borderWidth: 1, borderColor: '#eaeaeb' },
-  assetHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#eaeaeb', paddingBottom: 15, marginBottom: 15 },
-  sectionSubtitle: { fontSize: 12, fontWeight: '700', letterSpacing: 1, color: '#555' },
+  assetCard: { marginHorizontal: 20, padding: 20, marginTop: 10 },
+  assetHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, paddingBottom: 15, marginBottom: 15 },
+  sectionSubtitle: { fontSize: 12, fontWeight: '700', letterSpacing: 1 },
   liveBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  liveText: { fontSize: 10, fontWeight: '700', color: '#0a7a3a' },
+  liveText: { fontSize: 10, fontWeight: '700' },
   
   assetBody: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  netLiquidityLabel: { fontSize: 12, color: '#555', marginBottom: 5 },
-  netLiquidityValue: { fontSize: 22, fontWeight: '500', color: '#111' },
-  chartContainer: { flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 20, backgroundColor: '#e8ecea', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-  chartBar: { width: 14, borderRadius: 2 },
+  netLiquidityLabel: { fontSize: 12, marginBottom: 5 },
+  netLiquidityValue: { fontSize: 24, fontWeight: '700' },
+  chartContainer: { flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 26, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
+  chartBar: { width: 12, borderRadius: 2 },
 
   assetFooter: { flexDirection: 'row', justifyContent: 'space-between' },
-  totalLabel: { fontSize: 10, fontWeight: '700', color: '#555', letterSpacing: 1, marginBottom: 4 },
+  totalLabel: { fontSize: 10, fontWeight: '700', letterSpacing: 1, marginBottom: 4 },
   totalValue: { fontSize: 16, fontWeight: '700' },
 
   actionRow: { flexDirection: 'row', marginHorizontal: 20, marginTop: 20, gap: 10 },
-  syncBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#eef6f0', borderWidth: 1, borderColor: '#bad6c3', borderRadius: 8, paddingVertical: 12, gap: 8 },
-  syncBtnText: { color: '#13702a', fontWeight: '600', fontSize: 14 },
-  printBtn: { width: 50, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#eaeaeb', borderRadius: 8, backgroundColor: '#fff' },
+  syncBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 12, gap: 8, elevation: 1 },
+  syncBtnText: { fontWeight: '700', fontSize: 14 },
+  printBtn: { width: 50, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderRadius: 12 },
 
   activityHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 20, marginTop: 25, marginBottom: 15 },
-  viewAllText: { fontSize: 11, fontWeight: '700', color: '#13702a', letterSpacing: 0.5 },
+  viewAllText: { fontSize: 11, fontWeight: '700', letterSpacing: 0.5 },
 
-  activityItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', marginHorizontal: 20, marginBottom: 10, padding: 15, borderRadius: 10 },
+  activityCard: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: 20, marginBottom: 10, padding: 12, borderRadius: 16 },
   activityLeft: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 },
-  iconCircle: { width: 40, height: 40, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
-  activityTitle: { fontSize: 15, fontWeight: '500', color: '#111', marginBottom: 4 },
-  activitySub: { fontSize: 10, color: '#666', fontWeight: '600', letterSpacing: 0.5 },
+  iconCircle: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
+  activityTitle: { fontSize: 15, fontWeight: '600', marginBottom: 4 },
+  activitySub: { fontSize: 10, fontWeight: '600', letterSpacing: 0.5 },
   activityAmount: { fontSize: 15, fontWeight: '700', marginBottom: 4 },
-  activityStatus: { fontSize: 9, color: '#666', fontWeight: '700' },
+  activityStatus: { fontSize: 9, fontWeight: '700' },
 
-  marginCard: { backgroundColor: '#fff', marginHorizontal: 20, marginTop: 10, padding: 15, borderRadius: 10 },
+  marginCard: { marginHorizontal: 20, marginTop: 10, padding: 15 },
   marginHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
-  marginText: { fontSize: 12, color: '#333', fontFamily: 'monospace' },
-  marginPercent: { fontSize: 12, fontWeight: '700', color: '#13702a' },
-  progressBarBg: { height: 6, backgroundColor: '#eaeaeb', borderRadius: 3, overflow: 'hidden' },
-  progressBarFill: { width: '80%', height: '100%', backgroundColor: '#13702a' },
+  marginText: { fontSize: 12, fontFamily: 'monospace' },
+  marginPercent: { fontSize: 12, fontWeight: '700' },
+  progressBarBg: { height: 6, borderRadius: 3, overflow: 'hidden' },
+  progressBarFill: { width: '82%', height: '100%' },
 
   fabContainer: { position: 'absolute', bottom: 20, right: 20, alignItems: 'center', gap: 15 },
-  miniFab: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#e4e7e6', justifyContent: 'center', alignItems: 'center', elevation: 3, borderWidth: 1, borderColor: '#d1d6d3' },
+  miniFab: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', elevation: 4, borderWidth: 1 },
 });

@@ -1,101 +1,135 @@
-# FarmFinance 🌾 (Framin)
+# Farmin 🌾 (Framin)
 
-A comprehensive React Native mobile application for managing farm finances, tracking expenses, calculating ROI, and scheduling agricultural tasks. Built with Expo, TypeScript, and Supabase.
+A secure, enterprise-grade, offline-first mobile application for managing farm finances, tracking expenses, calculating ROI, scheduling agricultural tasks, and accessing weather-optimized AI agronomy reports. 
 
-## ✨ Features
+Built with **React Native (Expo)** on the frontend and **TypeScript (Express + MySQL)** on the backend.
 
-- **Financial Dashboard**: Track total balance, income, expenses, and overall ROI.
-- **Transaction Management**: Record and categorize farm expenses (e.g., seeds, fertilizer, labor) and revenues (e.g., crop sales).
-- **Task Scheduling**: Plan and manage agricultural tasks like planting, watering, and harvesting.
-- **Resource & Weather Tools**: Access agriculture-related videos and tools.
+---
 
-## 🚀 Prerequisites
+## 🏗️ Repository Architecture
 
-Before you begin, ensure you have the following installed on your machine:
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
-- [Git](https://git-scm.com/)
+The project has a decoupled, enterprise architecture:
 
-## 🛠️ Setup Instructions
+```
+farmin/
+├── src/                    # EXPRESS BACKEND (TypeScript)
+│   ├── config/             # DB Connection Configs
+│   ├── middleware/         # Security & Input Validation (JWT, Zod)
+│   ├── routes/             # Versioned REST Controllers (/api/v1)
+│   ├── tests/              # Jest API Test Suites
+│   └── index.ts            # App Entry Point (Helmet, Rate Limiter)
+├── FarmFinance/            # EXPO MOBILE FRONTEND (TypeScript)
+│   ├── src/
+│   │   ├── core/           # Env Config & Constants
+│   │   ├── data/           # Repository & Network Layer (Clean Architecture)
+│   │   ├── components/     # Reusable M3 Design Components
+│   │   ├── screens/        # Material 3 Mobile Screens
+│   │   └── services/       # Supabase Client & External API handlers
+│   └── package.json
+├── docker-compose.yml      # Multi-container Compose config
+├── Dockerfile              # Backend Multi-stage build script
+├── package.json            # Backend dev scripts & deps
+└── setup-db.js             # MySQL Schema Builder (indexed)
+```
 
-1. **Clone the repository** (if you haven't already):
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [Docker & Docker Compose](https://www.docker.com/) (Optional, for containerized run)
+- [MySQL Server](https://www.mysql.com/) (If running database locally)
+- [Expo CLI](https://docs.expo.dev/)
+
+---
+
+## 🛠️ Backend Setup & Commands
+
+1. **Install Dependencies**:
    ```bash
-   git clone https://github.com/vishnuvvh20-crypto/framin.git
-   cd framin
+   npm install
    ```
 
-2. **Navigate to the App Directory**:
+2. **Configure Environment Variables**:
+   Create a `.env` file in the root directory:
+   ```env
+   PORT=3000
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=your_password
+   DB_NAME=farmin
+   JWT_SECRET=your_jwt_signature_secret
+   ```
+
+3. **Initialize Database Tables**:
+   ```bash
+   node setup-db.js
+   ```
+
+4. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Compile TypeScript Build**:
+   ```bash
+   npm run build
+   ```
+
+6. **Run Unit Test Suites**:
+   ```bash
+   npm run test
+   ```
+
+---
+
+## 🐳 Docker Deployment
+
+To spin up the secure Express API along with a pre-configured MySQL database container instantly, simply run:
+```bash
+docker-compose up --build
+```
+This automatically initializes the MySQL database tables, mounts persistent volumes for data storage, runs database health checks, and boots the backend API server.
+
+---
+
+## 📱 Mobile App Setup & Commands
+
+1. **Navigate to App Directory**:
    ```bash
    cd FarmFinance
    ```
 
-3. **Install Dependencies**:
+2. **Install Dependencies**:
    ```bash
    npm install
    ```
-   *or if using yarn:*
-   ```bash
-   yarn install
-   ```
 
-4. **Environment Variables**:
-   Create a `.env` file in the root of the `FarmFinance` directory and add any necessary API keys. For example:
+3. **Configure Environment Variables**:
+   Create a `.env` file inside the `FarmFinance` directory:
    ```env
-   EXPO_PUBLIC_YOUTUBE_API_KEY=your_youtube_api_key_here
+   EXPO_PUBLIC_BACKEND_URL=http://localhost:3000
+   EXPO_PUBLIC_YOUTUBE_API_KEY=your_google_youtube_key
    EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
-   EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
    ```
 
-## 📱 Running the App Locally (Development)
-
-To start the development server, run:
-```bash
-npm start
-```
-*or*
-```bash
-npx expo start
-```
-
-This will start the Expo Metro Bundler. From there, you can:
-- Press `a` to open the app on an Android Emulator.
-- Press `i` to open the app on an iOS Simulator (macOS only).
-- Scan the QR code shown in the terminal using the **Expo Go** app on your physical iOS or Android device.
-
-## 📦 Deployment & Building
-
-This app is built using **Expo Application Services (EAS)**, making it simple to create production builds for iOS and Android.
-
-1. **Install EAS CLI** (if you haven't already):
+4. **Launch Expo Metrobundler**:
    ```bash
-   npm install -g eas-cli
+   npx expo start
    ```
+   - Press `a` to run on Android.
+   - Press `i` to run on iOS.
+   - Scan the QR code with **Expo Go** to preview on physical devices.
 
-2. **Login to Expo**:
-   ```bash
-   eas login
-   ```
+---
 
-3. **Configure the Project**:
-   ```bash
-   eas build:configure
-   ```
+## 🔒 Security Specifications
 
-4. **Build for Android (.apk or .aab)**:
-   ```bash
-   eas build --platform android --profile production
-   ```
-
-5. **Build for iOS (.ipa)**:
-   ```bash
-   eas build --platform ios --profile production
-   ```
-
-*Note: For iOS builds, you will need a valid Apple Developer account.*
-
-## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request or open an Issue.
-
-## 📜 License
-This project is proprietary.
+- **Payload Integrity**: All request payloads are validated on the server using Zod schemas.
+- **Request Protection**: Rate limits are set to 100 requests per 15 minutes per IP to guard against Denial of Service.
+- **Security Headers**: Helmet integration blocks cross-site scripting (XSS), clickjacking, and mime-type sniffing.
+- **Access Control**: All routes require valid Authorization headers checking Bearer JWT signatures.
+- **Credentials Masking**: Secrets are completely decoupled from code repositories using environment configs.

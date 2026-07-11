@@ -2,12 +2,20 @@ import { TextStyle } from 'react-native';
 
 export type ThemeColors = {
   primary: string;
+  onPrimary: string;
+  primaryContainer: string;
+  onPrimaryContainer: string;
   secondary: string;
   background: string;
+  surface: string;
+  onSurface: string;
+  surfaceVariant: string;
+  onSurfaceVariant: string;
   card: string;
   text: string;
   textLight: string;
   border: string;
+  outline: string;
   error: string;
   success: string;
   inputBackground: string;
@@ -15,55 +23,73 @@ export type ThemeColors = {
 };
 
 export const lightColors: ThemeColors = {
-  primary: '#2E7D32',
+  primary: '#1A643B', // M3 Forest Green
+  onPrimary: '#FFFFFF',
+  primaryContainer: '#D2E8D4',
+  onPrimaryContainer: '#042111',
   secondary: '#FFB300',
-  background: '#F5F5F5',
+  background: '#F4FBF7', // Very soft green-white background
+  surface: '#FFFFFF',
+  onSurface: '#191C19',
+  surfaceVariant: '#DEE5DE',
+  onSurfaceVariant: '#424943',
   card: '#FFFFFF',
-  text: '#212121',
-  textLight: '#757575',
-  border: '#E0E0E0',
-  error: '#D32F2F',
-  success: '#388E3C',
-  inputBackground: '#FFFFFF',
+  text: '#191C19',
+  textLight: '#5C635D',
+  border: '#DEE5DE',
+  outline: '#727972',
+  error: '#BA1A1A',
+  success: '#1A643B',
+  inputBackground: '#F0F5F1',
   statusBar: 'dark',
 };
 
 export const darkColors: ThemeColors = {
-  primary: '#4CAF50',
+  primary: '#85D4A3', // Bright M3 Green for Dark Mode
+  onPrimary: '#00391F',
+  primaryContainer: '#005230',
+  onPrimaryContainer: '#A0F1BE',
   secondary: '#FFB300',
-  background: '#121212',
-  card: '#1E1E1E',
-  text: '#E0E0E0',
-  textLight: '#9E9E9E',
-  border: '#333333',
-  error: '#EF5350',
-  success: '#66BB6A',
-  inputBackground: '#2C2C2C',
+  background: '#0F1511', // Dark charcoal/green
+  surface: '#111D15',
+  onSurface: '#E1E3DF',
+  surfaceVariant: '#424943',
+  onSurfaceVariant: '#C2C9C2',
+  card: '#18251D',
+  text: '#E1E3DF',
+  textLight: '#8C938D',
+  border: '#2C352F',
+  outline: '#8C938D',
+  error: '#FFB4AB',
+  success: '#85D4A3',
+  inputBackground: '#1D2A22',
   statusBar: 'light',
 };
 
-// Keep a default export for backward compat (used by static StyleSheet definitions)
-// but screens should use the useTheme() hook for dynamic colors
 export const colors = lightColors;
 
 export const createTypography = (themeColors: ThemeColors): Record<string, TextStyle> => ({
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 26,
+    fontWeight: '700',
     color: themeColors.text,
+    letterSpacing: -0.5,
   },
   title: {
     fontSize: 18,
     fontWeight: '600',
     color: themeColors.text,
+    letterSpacing: 0,
   },
   body: {
-    fontSize: 16,
+    fontSize: 15,
     color: themeColors.text,
+    lineHeight: 22,
   },
   caption: {
     fontSize: 12,
     color: themeColors.textLight,
+    letterSpacing: 0.5,
   },
 });
 
